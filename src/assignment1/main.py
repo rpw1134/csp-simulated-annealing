@@ -77,7 +77,6 @@ for j, f in enumerate([f1, f2]):
             func, iterations, point, value = hill_climb(init, step, f)
             num_til_convergence.append(iterations)
             max_vals.append(value)
-        print("Iterations:", mean(num_til_convergence), "Values:", stdev(num_til_convergence), mean(max_vals), stdev(max_vals))
         hill_climb_results[f'f{j+1}'][step] = f"Mean Steps, {mean(num_til_convergence):.3f}<br>Deviation Steps: {stdev(num_til_convergence):.3f}<br>Mean Value: {mean(max_vals):.3f}<br>Deviation Value: {stdev(max_vals):.3f}"
         
 hill_frame = pd.DataFrame(hill_climb_results).T
@@ -95,7 +94,6 @@ for j,f in enumerate([f1, f2]):
                 func, iterations, point, value = beam_search(step, w, f)
                 num_til_convergence.append(iterations)
                 max_vals.append(value)
-            print("Iterations:", mean(num_til_convergence), "Values:", stdev(num_til_convergence), mean(max_vals), stdev(max_vals))
             beam_search_results[w][step] = f"Mean Steps, {mean(num_til_convergence):.3f}<br>Deviation Steps: {stdev(num_til_convergence):.3f}<br>Mean Value: {mean(max_vals):.3f}<br>Deviation Value: {stdev(max_vals):.3f}"
     beam_frame = pd.DataFrame(beam_search_results).T
     beam_frame.index.name = 'Beam Width'

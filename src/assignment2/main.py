@@ -20,8 +20,6 @@ def p1(current, new, temperature):
 
 # exponential decay
 def annealing_schedule_1(temperature):
-    if temperature < 0.001:
-        return temperature
     return temperature * 0.99
 
 # exponential decay - heavier
@@ -52,6 +50,7 @@ def adjust_conflicts(grid, entry, probability, temperature):
     minn = float('inf')
     minn_val = -1
     for i, conflict in enumerate(new_conflicts):
+        # dont consider current value, as we want to be able to take a worse state in the case of no improvement
         if i+1 == val:
             continue
         if conflict < minn:
@@ -76,8 +75,6 @@ def generate_random_grid():
         grid[row][col] = val
     return grid
 
-print(generate_random_grid())
-
 def simulated_annealing(grid, temp_init, schedule, probability):
     for iteration in range(10000):
         conflict_cells = []
@@ -91,15 +88,16 @@ def simulated_annealing(grid, temp_init, schedule, probability):
                 total_conflicts += conflicts
                 if conflicts > 0:
                     conflict_cells.append((r, c, val, conflicts))
+        if iteration<5:
+            print(total_conflicts)
+            print(grid)
         if total_conflicts == 0:
-            print(f"Solved in {iteration} iterations")
             return 1
         changing_cell = conflict_cells[random.randint(0, len(conflict_cells)-1)]
         changing_cell = adjust_conflicts(grid, changing_cell, probability, temp_init)
         row, col, new_val, _ = changing_cell
         grid[row][col] = new_val
         temp_init = schedule(temp_init)
-    print("Max iterations reached")
     return 0
 
 def main():
